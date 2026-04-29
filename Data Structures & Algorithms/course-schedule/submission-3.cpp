@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<vector<int>>graphs(numCourses,vector<int>());
+        vector<int>indegree(numCourses);
+        for(vector<int>&ans : prerequisites){
+            graphs[ans[1]].push_back(ans[0]);
+            indegree[ans[0]]++;
+        }
+        queue<int>zero;
+        for(int i=0;i<numCourses;i++){
+            if(indegree[i] == 0) zero.push(i);
+        }
+
+        int visited = 0;
+        while(!zero.empty()){
+            int u = zero.front();
+            zero.pop();
+            visited++;
+            for(int v: graphs[u]){
+                indegree[v]--;
+                if(indegree[v] == 0){
+                    zero.push(v);
+                }
+            }
+        }
+        if(visited == numCourses){
+            return true;
+        } 
+        return false;
+    }
+};
